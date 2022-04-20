@@ -1,0 +1,27 @@
+service: event-bridge-invoker
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ap-south-1
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "events:PutEvents"
+          Resource: "*"
+        
+  
+functions:
+  eventBridgeInvoker:
+    handler: handler.eventBridgeInvoker
+    events:
+      - httpApi:
+          path: /testEventBridge
+          method: get
+
+  invokedFunc:
+    handler: handler.invokedFunc
